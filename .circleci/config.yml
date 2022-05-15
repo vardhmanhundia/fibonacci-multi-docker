@@ -5,18 +5,22 @@ orbs:
 jobs:
   build_client:
     docker:
-      - image: cimg/base:2021.04
+      - image: cimg/base@latest
     steps:
       - checkout
+      - setup_remote_docker:
+          version: "20.10.11"
       - run:
           command: docker build -t vardhmanhundia/multi-client ./client
           name: build client image
 
   client_test:
     docker:
-      - image: cimg/base:2021.04
+      - image: cimg/base@latest
     steps:
       - checkout
+      - setup_remote_docker:
+          version: "20.10.11"
       - run:
           command: docker build -t vardhmanhundia/react-test -f ./client/Dockerfile.dev ./client
           name: build test image for client
