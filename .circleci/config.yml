@@ -4,9 +4,8 @@ orbs:
 
 jobs:
   build_client:
-    executor:
-      name: node/default
-      tag: 14.15.1
+    docker:
+      - image: cimg/base:2021.04
     steps:
       - checkout
       - run:
@@ -14,9 +13,8 @@ jobs:
           name: build client image
 
   client_test:
-    executor:
-      name: node/default
-      tag: 14.15.1
+    docker:
+      - image: cimg/base:2021.04
     steps:
       - checkout
       - run:
