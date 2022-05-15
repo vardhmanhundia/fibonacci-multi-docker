@@ -3,23 +3,26 @@ orbs:
   node: circleci/node@5.0.2
 
 jobs:
-  build:
+  build_client:
     executor:
       name: node/default
+      tag: 14.15.1
     steps:
       - checkout
-      - run: echo "npm installing"
-      - run: npm install
-      - run: CI=true npm run build
+      - run:
+          command: docker build -t vardhmanhundia/multi-client ./client
+          name: build client image
 
-  test:
+  client_test:
     executor:
       name: node/default
+      tag: 14.15.1
     steps:
       - checkout
-      - run: echo "running tests"
-      - run: npm install
-      - run: npm run test
+      - run:
+          command: docker build -t vardhmanhundia/react-test -f ./client/Dockerfile.dev ./client
+          name: build test image for client
+      - run: docker run vardhmanhundia/react-test npm test -- --coverage
 
   hithere:
     executor:
@@ -30,10 +33,9 @@ jobs:
 
 workflows:
   version: 2
-  build_test_and_lint:
+  test_client:
     jobs:
-      - build
-      - hithere
-      - test:
+      - client_test
+      - build_client:
           requires:
-            - hithere
+            - "client_test"
