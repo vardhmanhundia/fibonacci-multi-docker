@@ -5,7 +5,7 @@ orbs:
 jobs:
   build_client:
     docker:
-      - image: cimg/base@latest
+      - image: cimg/base:2022.03
     steps:
       - checkout
       - setup_remote_docker:
@@ -16,7 +16,7 @@ jobs:
 
   client_test:
     docker:
-      - image: cimg/base@latest
+      - image: cimg/base:2022.03
     steps:
       - checkout
       - setup_remote_docker:
