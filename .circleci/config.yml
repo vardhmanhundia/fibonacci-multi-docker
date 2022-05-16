@@ -11,10 +11,10 @@ jobs:
       - setup_remote_docker:
           version: "20.10.11"
       - run:
-          command: docker build -t vardhmanhundia/multi-client ./client
+          command: docker build -t vardhmanhundia/multi-client ./client-typescript
           name: build client image
 
-  client_test:
+  build_client_test:
     docker:
       - image: cimg/base:2022.03
     steps:
@@ -22,9 +22,11 @@ jobs:
       - setup_remote_docker:
           version: "20.10.11"
       - run:
-          command: docker build -t vardhmanhundia/react-test -f ./client/Dockerfile.dev ./client
-          name: build test image for client
-      - run: docker run vardhmanhundia/react-test npm run test
+          command: docker build -t vardhmanhundia/react-test -f ./client-typescript/Dockerfile.dev ./client-typescript
+          name: build test image for client-typescript
+      - run:
+          command: docker run vardhmanhundia/react-test npm run test
+          name: run client-typescript tests
 
   hithere:
     executor:
