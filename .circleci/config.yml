@@ -38,7 +38,7 @@ jobs:
           command: docker push vardhmanhundia/multi-worker
           name: push worker image
 
-  build_client_test:
+  client_test:
     docker:
       - image: cimg/base:2022.03
     steps:
@@ -61,9 +61,9 @@ jobs:
 
 workflows:
   version: 2
-  test_client:
+  initial_workflow:
     jobs:
-      - build_client_test
+      - client_test
       - build_and_push_images:
           requires:
-            - "build_client_test"
+            - client_test
