@@ -14,8 +14,8 @@ jobs:
           command: docker build -t vardhmanhundia/multi-client ./client-typescript
           name: build client image
       - run:
-          command: docker build -t vardhmanhundia/multi-ngnix ./ngnix
-          name: build ngnix image
+          command: docker build -t vardhmanhundia/multi-nginx ./nginx
+          name: build nginx image
       - run:
           command: docker build -t vardhmanhundia/multi-service ./server
           name: build service image
@@ -29,8 +29,8 @@ jobs:
           command: docker push vardhmanhundia/multi-client
           name: push client image
       - run:
-          command: docker push vardhmanhundia/multi-ngnix
-          name: push ngnix image
+          command: docker push vardhmanhundia/multi-nginx
+          name: push nginx image
       - run:
           command: docker push vardhmanhundia/multi-service
           name: push service image
