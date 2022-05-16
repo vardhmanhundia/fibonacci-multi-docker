@@ -3,7 +3,7 @@ orbs:
   node: circleci/node@5.0.2
 
 jobs:
-  build_client:
+  build_and_push_images:
     docker:
       - image: cimg/base:2022.03
     steps:
@@ -13,6 +13,30 @@ jobs:
       - run:
           command: docker build -t vardhmanhundia/multi-client ./client-typescript
           name: build client image
+      - run:
+          command: docker build -t vardhmanhundia/multi-ngnix ./ngnix
+          name: build ngnix image
+      - run:
+          command: docker build -t vardhmanhundia/multi-service ./server
+          name: build service image
+      - run:
+          command: docker build -t vardhmanhundia/multi-worker ./worker
+          name: build worker image
+      - login_docker:
+          command: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+          name: docker login
+      - run:
+          command: docker push vardhmanhundia/multi-client
+          name: push client image
+      - run:
+          command: docker push vardhmanhundia/multi-ngnix
+          name: push ngnix image
+      - run:
+          command: docker push vardhmanhundia/multi-service
+          name: push service image
+      - run:
+          command: docker push vardhmanhundia/multi-worker
+          name: push worker image
 
   build_client_test:
     docker:
@@ -25,7 +49,7 @@ jobs:
           command: docker build -t vardhmanhundia/react-test -f ./client-typescript/Dockerfile.dev ./client-typescript
           name: build test image for client-typescript
       - run:
-          command: docker run vardhmanhundia/react-test npm run test
+          command: docker run vardhmanhundia/react-test npm test
           name: run client-typescript tests
 
   hithere:
@@ -39,7 +63,7 @@ workflows:
   version: 2
   test_client:
     jobs:
-      - client_test
-      - build_client:
+      - build_client_test
+      - build_and_push_images:
           requires:
-            - "client_test"
+            - "build_client_test"
