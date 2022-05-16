@@ -22,7 +22,7 @@ jobs:
       - run:
           command: docker build -t vardhmanhundia/multi-worker ./worker
           name: build worker image
-      - login_docker:
+      - run:
           command: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
           name: docker login
       - run:
