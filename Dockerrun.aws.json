@@ -1,0 +1,39 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "client",
+      "image": "vardhmanhundia/multi-client",
+      "hostname": "client",
+      "essential": false
+    },
+    {
+      "name": "service",
+      "image": "vardhmanhundia/multi-service",
+      "hostname": "service",
+      "essential": false
+    },
+    {
+      "name": "worker",
+      "image": "vardhmanhundia/multi-worker",
+      "hostname": "worker",
+      "essential": false
+    },
+    {
+      "name": "ngnix",
+      "image": "vardhmanhundia/multi-ngnix",
+      "hostname": "ngnix",
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ],
+      "links": [
+        "client",
+        "service"
+      ]
+    }
+  ]
+}
