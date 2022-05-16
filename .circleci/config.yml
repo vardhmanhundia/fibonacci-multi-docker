@@ -63,7 +63,4 @@ workflows:
   version: 2
   initial_workflow:
     jobs:
-      - client_test
-      - build_and_push_images:
-          requires:
-            - client_test
+      - build_and_push_images
