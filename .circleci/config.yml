@@ -24,7 +24,7 @@ jobs:
       - run:
           command: docker build -t vardhmanhundia/react-test -f ./client/Dockerfile.dev ./client
           name: build test image for client
-      - run: docker run vardhmanhundia/react-test npm test -- --coverage
+      - run: docker run vardhmanhundia/react-test npm run test
 
   hithere:
     executor:
