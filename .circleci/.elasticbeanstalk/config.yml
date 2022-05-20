@@ -1,0 +1,9 @@
+branch-defaults:
+  master:
+    environment: Multidockerlearning-env
+global:
+  application_name: multi-docker-learning
+  default_ec2_keyname: e-ng3v6tpafa
+  default_platform: ECS running on 64bit Amazon Linux 2/3.1.1
+  default_region: ap-south-1
+  sc: git

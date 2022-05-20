@@ -5,19 +5,22 @@
       "name": "client",
       "image": "vardhmanhundia/multi-client",
       "hostname": "client",
-      "essential": false
+      "essential": false,
+      "memory": 128
     },
     {
       "name": "service",
       "image": "vardhmanhundia/multi-service",
       "hostname": "service",
-      "essential": false
+      "essential": false,
+      "memory": 128
     },
     {
       "name": "worker",
       "image": "vardhmanhundia/multi-worker",
       "hostname": "worker",
-      "essential": false
+      "essential": false,
+      "memory": 128
     },
     {
       "name": "ngnix",
@@ -33,7 +36,8 @@
       "links": [
         "client",
         "service"
-      ]
+      ],
+      "memory": 128
     }
   ]
 }

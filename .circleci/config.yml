@@ -52,6 +52,22 @@ jobs:
           command: docker run vardhmanhundia/react-test npm test
           name: run client-typescript tests
 
+  deploy:
+    docker:
+      - image: cimg/base:2022.03
+    steps:
+      - checkout
+      - run:
+          name: Installing deployment dependencies
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get install python-pip python-dev build-essential
+            sudo pip install --upgrade setuptools
+            sudo pip install awsebcli --upgrade
+      - run:
+          name: Deploying to EB
+          command: eb deploy Multidockerlearning-env
+
   hithere:
     executor:
       name: node/default
