@@ -9,14 +9,39 @@ jobs:
       - setup_remote_docker:
           version: "20.10.11"
       - run:
-          command: docker build -t vardhmanhundia/client-test -f Dockerfile.dev ./client-typescript
+          command: docker build -t vardhmanhundia/client-test -f ./client-typescript/Dockerfile.dev ./client-typescript
           name: building the client for testing
       - run:
           command: docker run vardhmanhundia/client-test npm test
           name: run the client tests
-
+  build_and_push:
+    docker:
+      - image: cimg/base:2022.03
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: "20.10.11"
+      - run:
+          command: docker build -t vardhmanhundia/multi-client-2 ./client-typescript
+          name: building the production docker image
+      - run:
+          command: docker build -t vardhmanhundia/multi-worker-2 ./worker
+          name: building the production docker image
+      - run:
+          command: docker build -t vardhmanhundia/multi-service-2 ./server
+          name: building the production docker image
+      - run:
+          command: docker build -t vardhmanhundia/multi-nginx-2 ./nginx
+          name: building the production docker image
+      - run:
+          command: |
+            docker push vardhmanhundia/multi-client-2
+            docker push vardhmanhundia/multi-worker-2
+            docker push vardhmanhundia/multi-service-2
+            docker push vardhmanhundia/multi-ngnix-2
 workflows:
   version: 2
   testing:
     jobs:
       - client_testing
+      - build_and_push
