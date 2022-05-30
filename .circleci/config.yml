@@ -35,7 +35,7 @@ jobs:
           command: docker build -t vardhmanhundia/multi-nginx-2 ./nginx
           name: building the production docker image
       - run:
-          command: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --pasword-stdin
+          command: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
           name: docker login
       - run:
           command: |
