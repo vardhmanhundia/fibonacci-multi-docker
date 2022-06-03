@@ -66,7 +66,7 @@ jobs:
             sudo pip install awsebcli --upgrade
       - run:
           name: Deploying to EB
-          command: eb deploy Multidockerlearning-env
+          command: eb deploy "$EBENB"
 
   hithere:
     executor:
@@ -77,6 +77,13 @@ jobs:
 
 workflows:
   version: 2
-  initial_workflow:
+  build:
     jobs:
       - build_and_push_images
+      - deploy:
+          requires:
+            - build_and_push_images
+          filters:
+            branches:
+              only:
+                - final
