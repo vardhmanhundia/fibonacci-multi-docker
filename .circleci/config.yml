@@ -58,16 +58,19 @@ jobs:
       - image: cimg/base:2022.03
     steps:
       - checkout
-      - run:
-          name: Installing deployment dependencies
-          command: |
-            sudo apt-get -y -qq update
-            sudo apt-get install python3-pip python-dev build-essential
-            sudo pip install --upgrade setuptools
-            sudo pip install awsebcli --upgrade
+      - eb/setup
+      # - run:
+      #     name: Installing deployment dependencies
+      #     command: |
+      #       sudo apt-get -y -qq update
+      #       sudo apt-get install python3-pip python-dev build-essential
+      #       sudo pip install --upgrade setuptools
+      #       sudo pip install awsebcli --upgrade
       - run:
           name: Deploying to EB
-          command: eb deploy "$EBENB"
+          command: |
+            eb deploy "$EBENB"
+            eb status
 
   hithere:
     executor:
@@ -89,10 +92,10 @@ workflows:
             branches:
               only:
                 - final
-      # - deploy:
-      #     requires:
-      #       - build_and_push_images
-      #     filters:
-      #       branches:
-      #         only:
-      #           - final
+      - deploy:
+          requires:
+            - build_and_push_images
+          filters:
+            branches:
+              only:
+                - final
