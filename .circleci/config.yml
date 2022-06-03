@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   node: circleci/node@5.0.2
+  aws-elastic-beanstalk: circleci/aws-elastic-beanstalk@2.0.1
 
 jobs:
   build_and_push_images:
@@ -80,10 +81,18 @@ workflows:
   build:
     jobs:
       - build_and_push_images
-      - deploy:
-          requires:
-            - build_and_push_images
+      - aws-elastic-beanstalk/deploy:
+          context: aws-creds
+          application-name: multi-docker-learning
+          environment-name: "$EBENB"
           filters:
             branches:
               only:
                 - final
+      # - deploy:
+      #     requires:
+      #       - build_and_push_images
+      #     filters:
+      #       branches:
+      #         only:
+      #           - final
