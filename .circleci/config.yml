@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  eb: circleci/aws-elastic-beanstalk@2.0.1
+
 jobs:
   client_testing:
     docker:
@@ -43,9 +46,38 @@ jobs:
             docker push vardhmanhundia/multi-worker-2
             docker push vardhmanhundia/multi-service-2
             docker push vardhmanhundia/multi-nginx-2
+
+    env_setup:
+      - eb/setup
+      - run:
+          name: Verify EB install
+          command: |
+            command -v eb >/dev/null 2>&1 || { echo >&2 "EB cli failed to install or persist to the path"; exit 1; }
 workflows:
   version: 2
   testing:
     jobs:
       - client_testing
       - build_and_push
+      - env_setup:
+          requires:
+            - build_and_push
+          filters:
+            branches:
+              only: master
+      - eb/deploy:
+          post-steps:
+            - run:
+                name: Deploying to Elastic Benastalk
+                working_directory: .
+                command: curl $(eb status | grep CNAME | cut -d ":" -f 2)
+          context: [CPE_ORBS_AWS]
+          environment-name: sample-app-dev
+          application-name: sample_app
+          label: test-label
+          app-dir: .
+          requires:
+            - env_setup
+          filters:
+            branches:
+              only: master
